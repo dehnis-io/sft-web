@@ -35,7 +35,8 @@ Here the configuration sets up the kubernetes provider to authenticate against a
 ### create a .gitignore file and add
 .terraform/
 *.tfstate
-*.tfstate*
+*.tfstate.*
+terraform-config/minikube-linux-amd64
 
 
 ===== Dockerfile ======
