@@ -1,0 +1,47 @@
+Discussing the process of this devOps life circle
+
+== This is a portfolio website and the stacks used to devosify this project are 
+1. Terraform - for building up the infrastructure as code -- on minikube
+- Create a dockerfile to push an image of the project to the docker registry 
+2. Github action - for continue integration 
+3. Helm - as a package manager for our orchestration tool = kubernetes 
+4. Argocd - for continue delivery 
+
+Note: We'll not be using ingress for this project, so we use port forwarding to server our application to the web browser
+= Note: Docker should be installed on your machine as we'll configure terraform to set up minikube on the machine using docker as the driver 
+
+======= Terraform ==========
+Search for the procedure to install terraform on your machine.
+
+- In the project directory, create a folder call - terraform-config . The folder will contain 3 files, main.tf, provider.tf, backend.tf, variable.tf
+
+1. main.tf       - holds instructions for the base infrastructure resource
+
+2. provider.tf   - Here we'll define the resource for the kubenetes. This will let terraform interact with the kubernetes provider. This provider resource will pull connections details directory from the minikube cluster resource, allowing terraform to manage kubernetes resources within minikube. Thus the kubernetes provider configuration depends on the attributes from the minikube cluster resource.
+Here the configuration sets up the kubernetes provider to authenticate against a minikube cluster using client certificate authentication. 
+
+### Terraform needs a way to store the resources it manages and it does this using a state file. In a production environment, it will typically be stored in a remote backend like S3 or Azure blob storage. For the sake of this project, we'll use a local n=back end. So we will configure this in the backend.tf file.
+
+3. backend.tf    - holds he backend storage
+
+4. variable.tf   - hold any useful varibales
+
+= Now do
+- terraform init
+- terraform plan 
+- terraform apply 
+
+
+### create a .gitignore file and add
+.terraform/
+*.tfstate
+*.tfstate*
+
+
+===== Dockerfile ======
+In the root directory, create a docker file using nginx alpine as the base because we'll be using nginx web client server to server the website to the browser.
+
+
+===== Github action =====
+Next is to automate building and pushing the docker image to the docker registry using github action pipelines.
+
