@@ -95,8 +95,54 @@ Argocd does this by monitoring the githb reprository for any update. When it det
 Argocd automatically synchronizes the kubernetes cluster to match current state of the application.
 
 We'll use the terraform to get argocd deployed using helm.
-We'll set this up in our terraform provider.tf file 
+We'll set this up in our terraform provider.tf file - set kubenetes config path for helm 
+Add a new file call argocd.tf in the terraform-config file.
 
+## Note ###
+The helm release instruction in the teraform argocd config file wil install argocd directly into our 
+minikube cluster in argocd namespace as defined.
+Afterward run 
+- terraform init
+- terraform plan 
+- terraform apply 
 
+If successful, confirm the argocd resources:
+kubectl get namespace
+kubectl get all -n argocd
+
+To access the argocd locally=, we'll do the kubectl port forward with the argocd service name: 
+kubectl get svc -n argocd
+kubectl port-forward svc/argocd-server -n argocd 8081:443
+
+The port-forward command basically forwards traffic from the locally machine to argocd server in the 
+minikube cluster
+On web browser, go to localhost:8081
+
+the initial username to login to argoocd - admin
+To get the initial passowrd - kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d 
+
+##### Using argocd cli 
+since we will be using argocd cli to tell argocd which git repositiry to monitor and define the path
+to our helm chart and the desired namespace in kubernetes
+Let create argocd application file:
+In the project root directory, create - argocd-app.yaml 
+==define the instructions
+
+#### install argocd cli on your machine then login to argocd using your termnail 
+argocd login localhost:8081 --username admin --password <the_decoded_password> --insecure
+
+#### Note - Head tp github and create an acess token to be added to argocd as a repository credential - to enable argocd to access the githuuub repository 
+and monitor the heml chart. The access token will allow argocd to authenticate for read only purposes
+
+On github - head to your profile >> settings >> developer settings >> personal access token then click on Token (classic)
+Crreate new token (classic) - 
+Give it a name, token TTL duration and check on repo
+Grab the generated token and do this in your terminal 
+
+argocd repo add <project_github_repo_url> --username <github_username> --password "<github_access_token>" --server localhost:8081 --insecure
+
+## note ## 
+we are using the --secure flag to tell argocd to skid TLS verification. This is just for development environment for this project
+but for production envronemnt it is not recommended, it is best to use a trusted certificate
 
 
