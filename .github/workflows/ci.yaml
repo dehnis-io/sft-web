@@ -45,8 +45,9 @@ jobs:
 
     - name: Update Helm chart with new Image tag
       run: |
-        sed -i "s/tag: .*/tag: ${ env.SHORT_SHA }/" ./sft-web-helm-chart/values.yaml
+        sed -i "s/tag: .*/tag: $SHORT_SHA/" ./sft-web-helm-chart/values.yaml
         git add ./sft-web-helm-chart/values.yaml
-        git commit -m "Git-action updated image tag to ${ env.SHORT_SHA }" 
-        git push 
+        git commit -m "Git-action updated image tag to $SHORT_SHA" 
+        git push
+ 
 
