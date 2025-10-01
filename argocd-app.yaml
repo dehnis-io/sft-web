@@ -12,9 +12,8 @@ spec:
     path: sft-web-helm-chart                  # Project helm chart in the repository
     helm:
       releaseName: sft-web-project
-      # Add if you have values files:
-      # valueFiles:
-      #   - values.yaml
+      valueFiles:
+        - values.yaml
   destination:
     server: "https://kubernetes.default.svc"   # same cluster where Argocd is running 
     namespace: default
