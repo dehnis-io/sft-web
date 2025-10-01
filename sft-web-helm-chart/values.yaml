@@ -2,29 +2,32 @@ replicaCount: 3
 
 image:
   name: techadvocate247/sft-web
-  tag: 7f3c5be
+  tag: 4ca8fc7
   pullPolicy: IfNotPresent
 
-# imagePullSecrets: []
-# nameOverride: ""
-# fullnameOverride: ""
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
 
 service:
   type: ClusterIP
   port: 80
-  # Optional: add targetPort if your app uses different container port
-  targetPort: 8080
+  # Add targetPort if your app uses different container port
+  # targetPort: 8080
 
 ingress:
   enabled: false
 
 serviceAccount:
   enabled: false
+  create: false
+  name: ""
 
 autoscaling:
   enabled: false
 
-# Add these sections:
 resources:
   limits:
     memory: "256Mi"
@@ -32,3 +35,43 @@ resources:
   requests:
     memory: "128Mi"
     cpu: "100m"
+
+livenessProbe:
+  enabled: true
+  path: /
+  port: 80
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+readinessProbe:
+  enabled: true
+  path: /
+  port: 80
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 3
+
+env: []
+# Example:
+# - name: ENV_VAR
+#   value: "value"
+
+volumeMounts: []
+# Example:
+# - name: config
+#   mountPath: /app/config
+
+volumes: []
+# Example:
+# - name: config
+#   configMap:
+#     name: app-config
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
