@@ -5,9 +5,15 @@ image:
   tag: 7d8cc50
   pullPolicy: IfNotPresent
 
+# imagePullSecrets: []
+# nameOverride: ""
+# fullnameOverride: ""
+
 service:
   type: ClusterIP
   port: 80
+  # Optional: add targetPort if your app uses different container port
+  targetPort: 8080
 
 ingress:
   enabled: false
@@ -17,3 +23,12 @@ serviceAccount:
 
 autoscaling:
   enabled: false
+
+# Add these sections:
+resources:
+  limits:
+    memory: "256Mi"
+    cpu: "250m"
+  requests:
+    memory: "128Mi"
+    cpu: "100m"

@@ -1,3 +1,4 @@
+
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -9,10 +10,18 @@ spec:
     repoURL: "https://github.com/dehnis-io/sft-web.git"
     targetRevision: HEAD                      # watch the latest commit
     path: sft-web-helm-chart                  # Project helm chart in the repository
+    helm:
+      releaseName: sft-web-project
+      # Add if you have values files:
+      # valueFiles:
+      #   - values.yaml
   destination:
-    server: "https://kubernetes.default.svc"  # same cluster where Argocd is running 
+    server: "https://kubernetes.default.svc"   # same cluster where Argocd is running 
     namespace: default
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
