@@ -1,0 +1,19 @@
+replicaCount: 3
+
+image:
+  name: techadvocate247/sft-web
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+
+serviceAccount:
+  enabled: false
+
+autoscaling:
+  enabled: false

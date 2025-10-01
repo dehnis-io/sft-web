@@ -23,6 +23,6 @@ resource "minikube_cluster" "minikube_docker" {
     "default-storageclass",
     "storage-provisioner"
   ]
-  cpus         = 2
+  # cpus         = 1
   memory       = 2048
 }

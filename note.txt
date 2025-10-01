@@ -44,5 +44,59 @@ In the root directory, create a docker file using nginx alpine as the base becau
 
 
 ===== Github action =====
-Next is to automate building and pushing the docker image to the docker registry using github action pipelines.
+Next - is to automate building and pushing the docker image to the docker registry using github action pipelines.
+In the root directory create a .github folder and inside it create another folder called workflows:
+mkdir -p .github/workflows
+cd into the .github >> workflows and create a file called ci.yaml - touch ci.yaml
+
+In the ci.yaml file, we will write the pipeline for the continue integration of our project 
+
+## go setup secrets for login into your docker registry to enable github access the docker registry and push the image
+On the github, while in the project repository, click on the settings option at the right side of the page and scroll on the left nav to secrets and variables >> actions  
+Click on new repository secret - enter name for the secret, say: 
+
+DOCKER_USERNAME = type in the value of your docker registry username and add 
+DOCKER_TOKEN = login to your docker >> go to account settings>> personal access token then generate a new token, go back to github and add the token  
+
+== Also for the git-action to be able to automatically push new commit or update, we need to pass a token from github. So in you profile settings, go and generate a token and then in the repo, go to the secret and variable section again and add a secret variable form github, 
+
+
+===== Helm =====
+Now, lets set up helm to manage our kubernetes deployments. 
+Helm is a package manager for Kubernetes that uses a packaging format called charts. Charts are collections of files that describe a related set of Kubernetes resources. Helm simplifies deploying and managing kubernetes resources across clusters.
+Install heml on your machine  - 
+So on the terminal while in the project root directory do - helm create projectName-helm-chart
+
+In the text editor, open the values.yaml file in the project helm chart.
+
+Basic helm chart archi:
+sft-web/                 <-- Helm chart root folder
+├─ Chart.yaml            <-- chart metadata (your snippet goes here)
+├─ values.yaml           <-- default values
+└─ templates/            <-- k8s manifests rendered from templates
+   ├─ deployment.yaml
+   ├─ service.yaml
+   └─ ingress.yaml
+
+We will write out helm instructions in the values.yaml file
+
+
+###### Let's go update the ci.yaml file the .github folder 
+We'll use the linux (sed) command to find the tag line in the values.yml file and replace the tag with the latest
+image ID generated in the git-action pipeline using the git SHA
+
+Set Git author 
+
+
+====== ArgoCD =====
+Let's set up argocd for continue delivery of our code update. This ensue that any modification made to 
+the application code is replaced to kubernetes which is serving the application to the web/ users
+Argocd does this by monitoring the githb reprository for any update. When it detects a change in the helm chart
+Argocd automatically synchronizes the kubernetes cluster to match current state of the application.
+
+We'll use the terraform to get argocd deployed using helm.
+We'll set this up in our terraform provider.tf file 
+
+
+
 
