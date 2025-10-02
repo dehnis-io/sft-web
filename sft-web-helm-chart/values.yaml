@@ -2,7 +2,7 @@ replicaCount: 3
 
 image:
   name: techadvocate247/sft-web
-  tag: a0f90fb
+  tag: b3ae416
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
