@@ -78,7 +78,10 @@ sft-web/                 <-- Helm chart root folder
    ├─ service.yaml
    └─ ingress.yaml
 
+Define custom manifest entries for deployment and service manifest in the project helm chart - template folder
 We will write out helm instructions in the values.yaml file
+
+Created _helpers.tpl in the template folder as well and wrote some instructions 
 
 
 ###### Let's go update the ci.yaml file the .github folder 
@@ -141,8 +144,31 @@ Grab the generated token and do this in your terminal
 
 argocd repo add <project_github_repo_url> --username <github_username> --password "<github_access_token>" --server localhost:8081 --insecure
 
+To access the argocd UI - 
+kubectl port-forward svc/argocd-server -n argocd <port>:443
+kubectl port-forward svc/argocd-server -n argocd 8081:443
+
+= localhost:8081
+
+After writing manifest for argocd 
+kubectl apply -f argocd-app.yaml
+
 ## note ## 
 we are using the --secure flag to tell argocd to skid TLS verification. This is just for development environment for this project
 but for production envronemnt it is not recommended, it is best to use a trusted certificate
 
+On the projject repo - go to settings >> actions >> general >> scroll to work flow permission check the read and write permissions radio button and save.
 
+-- commit and push changes
+-- confirm that CI works fine 
+-- confirm that argocd works fine 
+-- confirm that pods and service are created 
+
+kubectl get --all-namespaces
+kubectl get pods
+kubectl get svc
+
+kubectl port-forward svc/<project-service-name> 8181:80
+
+= localhost:8181
+Viola!!!
